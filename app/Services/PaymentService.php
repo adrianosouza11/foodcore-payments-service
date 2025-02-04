@@ -23,4 +23,13 @@ class PaymentService
         return $this->repository->create($data);
     }
 
+    /**
+     * @param int $orderId
+     * @return Array
+     */
+    public function statusByOrderId(int $orderId) : array
+    {
+        return $this->repository->statusByOrderId($orderId);
+    }
+
 }

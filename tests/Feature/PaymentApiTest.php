@@ -2,6 +2,7 @@
 
 namespace Feature;
 
+use App\Models\Payment;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
@@ -39,6 +40,33 @@ class PaymentApiTest extends TestCase
 
         //Assert
         $response->assertStatus(201)
+            ->assertJson($expectedOrderStructure);
+    }
+
+    public function test_payment_status_must_be_returned_via_api()
+    {
+        //Arrange
+        $payment = Payment::factory()->create();
+
+        $orderId = 1;
+
+        $expectedOrderStructure = function(AssertableJson $json) {
+            $json->has('status');
+            $json->has('message');
+            $json->has('data', function (AssertableJson $json) {
+                $json->has('payment_reference');
+                $json->has('amount');
+                $json->has('status');
+                $json->has('order_id');
+                $json->has('updated_at');
+            });
+        };
+
+        //Act
+        $response = $this->get('/api/payments/status/ ' . $payment->order_id . '/order');
+
+        //Assert
+        $response->assertStatus(200)
             ->assertJson($expectedOrderStructure);
     }
 }

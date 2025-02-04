@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Services\PaymentService;
 use App\Repositories\PaymentRepository;
 use App\Http\Requests\StorePaymentRequest;
@@ -30,5 +29,20 @@ class PaymentController extends Controller
             'message' => 'create an payment',
             'data' => [ ...$payment->getAttributes() ]
         ], 201);
+    }
+
+    /**
+     * @param int $order_id
+     * @return JsonResponse
+     */
+    public function statusByOrderId(int $order_id): JsonResponse
+    {
+        $paymentStatus = $this->service->statusByOrderId($order_id);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Payment status by order id',
+            'data' => $paymentStatus
+        ]);
     }
 }

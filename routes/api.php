@@ -15,3 +15,4 @@ use \App\Http\Controllers\PaymentController;
 */
 
 Route::apiResource('/', PaymentController::class);
+Route::get('/status/{order_id}/order', PaymentController::class . '@statusByOrderId');
